@@ -27,8 +27,8 @@
                             </tbody>
                         </table>
 
-                        <button type="button" class="btn btn-secondary">Add Column</button>
-                        <button type="button" class="btn btn-secondary">Add Row</button>
+                        <button type="button" class="btn btn-secondary" @click="addColumn">Add Column</button>
+                        <button type="button" class="btn btn-secondary" @click="addRow">Add Row</button>
                     </div>
 
                     <div class="card-footer text-right">
@@ -49,37 +49,45 @@
             return {
                 data: [
                     {
-                        first_name: 'John',
-                        last_name: 'Doe',
+                        firstName: 'John',
+                        lastName: 'Doe',
                         emailAddress: 'john.doe@example.com'
                     },
                     {
-                        first_name: 'John',
-                        last_name: 'Doe',
+                        firstName: 'John',
+                        lastName: 'Doe',
                         emailAddress: 'john.doe@example.com'
                     },
 
                 ],
                 columns: [
-                    {key: 'first_name'},
-                    {key: 'last_name'},
-                    {key: 'emailAddress'},
-
+                    {key: 'first name'},
+                    {key: 'last name'},
+                    {key: 'email address'},
                 ]
             }
         },
 
         methods: {
-            add_row() {
-                // Add new row to data with column keys
+            addRow() {
+                let row = this.data[0];
+                for (var item in row) {
+                    item = "";
+                }
+                this.data.push(row)
             },
 
-            remove_row(row_index) {
+            removeRow(row_index) {
                 // remove the given row
             },
 
-            add_column() {
-
+            addColumn() {
+                this.columns.push({key: ''})
+                for (var item in this.data) {
+                    console.log(this.data[item]);
+                    var keyname = 'key' + this.columns.length;
+                    this.data[item][keyname] = '';
+                }
             },
 
             updateColumnKey(column, event) {
@@ -103,9 +111,17 @@
                     }
                 )
             },
-
             submit() {
-                return axios.patch('/api/csv-export', this.data);
+                axios.patch('/api/csv-export', {'columns': this.columns, 'data': this.data}).then((response) => {
+                    var encodedUri = encodeURI(response.data);
+                    console.log(encodedUri);
+                    var link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "my_data.csv");
+                    document.body.appendChild(link); // Required for FF
+
+                    link.click()
+                }).catch(() => console.log('error occured'));
             }
         },
 
