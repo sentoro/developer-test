@@ -11,17 +11,22 @@ use Maatwebsite\Excel\Facades\Excel;
 class CsvExport extends Controller
 {
     /**
-     * Converts the user input into a CSV file and streams the file back to the user
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function convert(Request $request)
     {
-        $fileName = Str::random(10) . ".csv";
-        $data = $request->all();
-        $file = Excel::store(new ExportToCSV($data), $fileName, 'public', 'Csv');
-        if ($file) {
+        try {
+            $fileName = Str::random(10) . ".csv";
+            $data = $request->all();
+            if (!count($data)) {
+                return response(['success' => false, 'message' => 'Your data empty'], 400);
+            }
+            Excel::store(new ExportToCSV($data), $fileName, 'public', 'Csv');
             $filepath = config('app.url') . '/storage/' . $fileName;
-
             return response(['success' => true, 'url' => $filepath], 200);
+        } catch (\Exception $e) {
+            return response(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
 }
