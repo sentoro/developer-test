@@ -50,6 +50,6 @@
 <script>
     import CSVGenerator from "../js/components/CSVGenerator";
     export default {
-        components: {CSVGenerator}
+        components: { CSVGenerator }
     }
 </script>

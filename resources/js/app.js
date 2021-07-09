@@ -9,9 +9,11 @@ require('./bootstrap');
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VModal from 'vue-js-modal'
 
 window.Vue = require('vue');
 
+Vue.use(VModal, { dialog: true })
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin

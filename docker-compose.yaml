@@ -1,0 +1,36 @@
+version: '3'
+services:
+  db:
+    image: mysql:8.0
+    container_name: dev-test-bd
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: dev_test_db
+      MYSQL_USER: dev_test_user
+      MYSQL_PASSWORD: dev_test_password
+    ports:
+      - 3306:3306
+  php:
+    image: webdevops/php-dev:7.4
+    container_name: dev-test-php
+    volumes:
+      - "./:/laravel"
+    working_dir: "/laravel"
+    ports:
+      - "9000:9000"
+  nginx:
+    image: webdevops/nginx
+    container_name: dev-test-nginx
+    volumes:
+      - "./:/laravel"
+    ports:
+      - "8080:80"
+    environment:
+      WEB_DOCUMENT_ROOT: /laravel/public
+      WEB_DOCUMENT_INDEX: index.php
+      WEB_PHP_SOCKET: php:9000
+volumes:
+  db_data: {}
