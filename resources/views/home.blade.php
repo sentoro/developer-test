@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
@@ -20,9 +19,9 @@
                 height: 100vh;
                 margin: 0;
             }
-
         </style>
     </head>
+
     <body>
         <div id="app">
             <div class="container">
@@ -41,15 +40,10 @@
                     </div>
                 </div>
             </div>
-            <c-s-v-generator></c-s-v-generator>
+
+            <csv-generator/>
         </div>
 
         <script src="{{ asset('/js/app.js') }}" type="text/javascript"></script>
     </body>
 </html>
-<script>
-    import CSVGenerator from "../js/components/CSVGenerator";
-    export default {
-        components: {CSVGenerator}
-    }
-</script>
